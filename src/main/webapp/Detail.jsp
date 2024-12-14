@@ -45,7 +45,7 @@
 	<%
 	Product p = (Product) request.getAttribute("product");
 	Shop shop = (Shop) request.getAttribute("shop");
-	ArrayList<Comment> commentList =(ArrayList<Comment>) request.getAttribute("comments");
+	ArrayList<Comment> commentList = (ArrayList<Comment>) request.getAttribute("comments");
 	%>
 
 	<div class="container">
@@ -123,11 +123,10 @@
 						</div>
 						<div class="product-price-discount">
 							<span><%=Product.formMoney(p.getSalePrice())%>₫</span><span
-								class="line-through">
-								<%
-								if (p.getOriginalPrice().equals(p.getSalePrice()) == false)
-									out.print(Product.formMoney(p.getOriginalPrice()) + "₫");
-								%>
+								class="line-through"> <%
+ if (p.getOriginalPrice().equals(p.getSalePrice()) == false)
+ 	out.print(Product.formMoney(p.getOriginalPrice()) + "₫");
+ %>
 							</span>
 						</div>
 					</div>
@@ -168,7 +167,7 @@
 							<div class="qtyplus">+</div>
 						</form>
 						<a href="#" class="round-black-btn">Thêm Vào Giỏ <i
-							class="fa fa-cart-plus" aria-hidden="true"></i></a> <a href="#"
+							class="fa fa-cart-plus" aria-hidden="true"></i></a> <a href="../Trangchu/Payment"
 							class="round-black-btn">Mua Ngay <i class="fa fa-money"
 							aria-hidden="true"></i></a>
 					</div>
@@ -178,14 +177,12 @@
 		<div class="shop_owner">
 			<div class="decoration_shop">
 				<div class="avatar_shop">
-					<img
-						src="<%=shop.getUrlAvatar() %>"
-						alt=""
+					<img src="<%=shop.getUrlAvatar()%>" alt=""
 						style="border-radius: 50%; border: 2px solid #777777; width: 80px; margin: 20px;">
 				</div>
 				<div class="set_shop">
 					<div class="name_shop">
-						<h2 style="margin: 10px; padding: 0;"><%=shop.getNameShop() %></h2>
+						<h2 style="margin: 10px; padding: 0;"><%=shop.getNameShop()%></h2>
 					</div>
 					<div class="button_shop">
 						<button style="background-color: #FF9966; color: #ee4d2d;">
@@ -205,7 +202,7 @@
 					Tỉ lệ phản hồi <span>94.4%</span>
 				</p>
 				<p>
-					Số người theo dõi <span><%=shop.getNumFollower() %></span>
+					Số người theo dõi <span><%=shop.getNumFollower()%></span>
 				</p>
 			</div>
 		</div>
