@@ -10,6 +10,16 @@ public class CartBO {
 	public static void addCartToData(Cart cart) {
 		CartDAO.insert(cart.getQuantity(), cart.getFeature(), cart.getClientID(), cart.getProductID());
 	}
+	
+	public static void addItemToCart(int clientID, int productID, int quantity) {
+	    // Kiểm tra nếu sản phẩm đã tồn tại trong giỏ
+	    if (CartDAO.checkItemExists(clientID, productID)) {
+	        CartDAO.increaseQuantity(clientID, productID, quantity);
+	    } else {
+	        CartDAO.addNewItem(clientID, productID, quantity);
+	    }
+	}
+
 
 	public static ArrayList<Cart> getAllItemsCart() {
 
@@ -23,7 +33,7 @@ public class CartBO {
 
 	public static ArrayList<Cart> getItemsCartByClient(int clientID) {
 
-		return CartDAO.findAll();
+		return CartDAO.findByClientId(clientID);
 	}
 
 	public static void deleteItemInCart(int cartID) {
