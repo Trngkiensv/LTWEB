@@ -12,8 +12,13 @@ html {
   -webkit-text-size-adjust: 100%;
       -ms-text-size-adjust: 100%;
 }
+
+
 body {
   margin: 0;
+}
+.paypal-buttons {
+	display: none !important;
 }
 article,
 aside,
@@ -80,6 +85,8 @@ sup {
   line-height: 0;
   vertical-align: baseline;
 }
+
+
 sup {
   top: -.5em;
 }

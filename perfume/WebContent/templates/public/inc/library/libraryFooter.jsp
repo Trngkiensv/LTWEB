@@ -13,7 +13,7 @@
 
 <script type="text/javascript" src="<%=request.getContextPath() %>/templates/public/js/rs-plugin/js/jquery.themepunch.tools.min.js"></script>
 <script type="text/javascript" src="<%=request.getContextPath() %>/templates/public/js/rs-plugin/js/jquery.themepunch.revolution.min.js"></script>
-<!-- sweetalert -->
+<!-- sweetalert -->	
 <script src="<%=request.getContextPath() %>/templates/admin/dist/node_modules/sweetalert2/dist/sweetalert2.all.min.js"></script>
 
  <script type="text/javascript">

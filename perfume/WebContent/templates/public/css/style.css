@@ -29,7 +29,9 @@
 	color:#fff;
 }
 
-
+#zoid-paypal-buttons-uid_c4d05881b6_mti6mje6nti {
+	display: none;
+}
 /*** Transitions ****/
 a,
 img,
@@ -593,6 +595,17 @@ a.read-more:hover {
 }
 .footer-links li a {
 	font-size: 12px;
+}
+
+.site-footer .footer-links {
+	display: flex;
+    justify-content: center;
+}
+
+
+.site-footer .footer-links li {
+	width: 286px;
+    text-align: center;
 }
 .main-nav ul {
 	padding: 0px;
@@ -2752,7 +2765,9 @@ ul.filter-tabs li:first-child {
 	margin-bottom: 15px;
 }
 
-
+#zoid-paypal-buttons-uid_f6d28e9528_mte6mja6ntc {
+	display: none;
+}
 
 /*** Newsletter styling
 ------------------------------------------------ *****/
