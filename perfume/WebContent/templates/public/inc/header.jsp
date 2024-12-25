@@ -105,7 +105,7 @@
 
 		<div class="main-bar">
 			<div class="logo">
-				<a href="index-2.html"><img
+				<a href="<%=request.getContextPath()%>/home"><img
 					src="<%=request.getContextPath()%>/templates/public/images/logo.png"
 					alt="perfume"></a>
 			</div>

@@ -44,34 +44,38 @@ public class PublicAddtoCartController extends HttpServlet {
 				}
 				HttpSession session = request.getSession();
 				if (session.getAttribute("order") == null) {
-					Order order = new Order();
-					List<Item> listItems = new ArrayList<Item>();
-					Item item = new Item();
-					item.setQuantity(quantity);
-					item.setProduct(product);
-					item.setPrice(product.getMoney());
-					listItems.add(item);
-					order.setItem(listItems);
-					session.setAttribute("order", order);
+				    Order order = new Order();
+				    List<Item> listItems = new ArrayList<Item>();
+				    Item item = new Item();
+				    item.setId(1); // Gán ID khởi đầu là 1
+				    item.setQuantity(quantity);
+				    item.setProduct(product);
+				    item.setPrice(product.getMoney());
+				    listItems.add(item);
+				    order.setItem(listItems);
+				    session.setAttribute("order", order);
 				} else {
-					Order order = (Order) session.getAttribute("order");
-					List<Item> listItems = order.getItem();
-					boolean check = false;
-					for (Item item : listItems) {
-						if (item.getProduct().getId() == product.getId()) {
-							item.setQuantity(item.getQuantity() + quantity);
-							check = true;
-						}
-					}
-					if (check == false) {
-						Item item = new Item();
-						item.setQuantity(quantity);
-						item.setProduct(product);
-						item.setPrice(product.getMoney());
-						listItems.add(item);
-					}
-					session.setAttribute("order", order);
+				    Order order = (Order) session.getAttribute("order");
+				    List<Item> listItems = order.getItem();
+				    boolean check = false;
+				    for (Item item : listItems) {
+				        if (item.getProduct().getId() == product.getId()) {
+				            item.setQuantity(item.getQuantity() + quantity);
+				            check = true;
+				        }
+				    }
+				    if (check == false) {
+				        Item item = new Item();
+				        // Gán ID dựa trên kích thước của danh sách hiện tại
+				        item.setId(listItems.size() + 1);
+				        item.setQuantity(quantity);
+				        item.setProduct(product);
+				        item.setPrice(product.getMoney());
+				        listItems.add(item);
+				    }
+				    session.setAttribute("order", order);
 				}
+
 			}
 			response.sendRedirect(request.getContextPath() + "/order");
 		} catch (NumberFormatException e) {
@@ -82,14 +86,26 @@ public class PublicAddtoCartController extends HttpServlet {
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		int idOrder;
-		if (request.getParameter("idOrder") != null) {
-			idOrder = Integer.parseInt(request.getParameter("idOrder"));
-			HttpSession session = request.getSession();
-			session.removeAttribute("idOrder");
-		}
-		response.sendRedirect(request.getContextPath() + "/order");
+	        throws ServletException, IOException {
+	    int idOrder;
+	    if (request.getParameter("idOrder") != null) {
+	        try {
+	            idOrder = Integer.parseInt(request.getParameter("idOrder"));
+	            HttpSession session = request.getSession();
+	            Order order = (Order) session.getAttribute("order");
+	            if (order != null) {
+	                List<Item> listItems = order.getItem();
+	                // Xóa sản phẩm dựa trên idOrder
+	                listItems.removeIf(item -> item.getId() == idOrder);
+	                // Cập nhật lại session
+	                order.setItem(listItems);
+	                session.setAttribute("order", order);
+	            }
+	        } catch (NumberFormatException e) {
+	            e.printStackTrace();
+	        }
+	    }
+	    response.sendRedirect(request.getContextPath() + "/order");
 	}
 
 }
