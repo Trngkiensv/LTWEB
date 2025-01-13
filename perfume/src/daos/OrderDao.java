@@ -61,6 +61,22 @@ public class OrderDao extends AbstractDAO{
 		}
 		return orderList;
 	}
+	public List<Integer> findAllOrderID() {
+		con = DBConnectionUtil.getConnection();
+		List<Integer> orderList = new ArrayList<Integer>();
+		String sql = "SELECT id FROM `order`" ;
+		try {
+			st = con.createStatement();
+			rs = st.executeQuery(sql);
+			while(rs.next()) {
+				int id = rs.getInt("id");
+				orderList.add(id);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return orderList;
+	}
 
 	public int addStatus(Order order) {
 		int result = 0;
@@ -92,5 +108,8 @@ public class OrderDao extends AbstractDAO{
 		}
 		return result;
 	}
-	
+	public static void main(String[] args) {
+		OrderDao dao = new OrderDao();
+		System.out.println(dao.findAllOrderID().getLast());
+	}
 }

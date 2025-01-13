@@ -1,9 +1,16 @@
 package daos;
 
+import java.security.KeyPair;
+import java.security.NoSuchAlgorithmException;
+import java.security.PrivateKey;
+import java.security.PublicKey;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import controllers.auths.DigitalSignatureUtil;
 import models.CatUser;
 import models.User;
 import util.DBConnectionUtil;
@@ -252,12 +259,24 @@ public class UserDao extends AbstractDAO {
 	public int signup(User user) {
 		int result = 0;
 		con = DBConnectionUtil.getConnection();
-		String sql = "INSERT INTO user(username,fullname,password) VALUES(?,?,?)";
+		DigitalSignatureUtil digi = new DigitalSignatureUtil();
+		KeyPair keyPair = null;
+		try {
+			keyPair = digi.generateKeyPair();
+		} catch (NoSuchAlgorithmException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		String pubKey = digi.getPublicKey(keyPair);
+		String privKey = digi.getPrivateKey(keyPair);
+		String sql = "INSERT INTO user(username,fullname,password,pubKey,privKey) VALUES(?,?,?,?,?)";
 		try {
 			pst = con.prepareStatement(sql);
 			pst.setString(1, user.getUsername());
 			pst.setString(2, user.getFullname());
 			pst.setString(3, user.getPassword());
+			pst.setString(4, pubKey);
+			pst.setString(5, privKey);
 			result = pst.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -307,6 +326,48 @@ public class UserDao extends AbstractDAO {
 		}
 		return objUser;
 	}
+	
+	public String getPrivKey(int id) {
+		String privKey = "";
+	    String sql = "SELECT privKey as privKey FROM user WHERE id = ?";
+	    con = DBConnectionUtil.getConnection();
+	    try {
+	        pst = con.prepareStatement(sql);
+	        pst.setInt(1, id);
+	        try (ResultSet rs = pst.executeQuery()) {
+	            if (rs.next()) {
+	                privKey = rs.getString("privKey");
+	                if (privKey == null) {
+	                    privKey = ""; // Xử lý nếu giá trị là NULL
+	                }
+	            }
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	    return privKey;
+	}
+	
+	public String getPubKey(int id) {
+		String pubKey = "";
+	    String sql = "SELECT pubKey as pubKey FROM user WHERE id = ?";
+	    con = DBConnectionUtil.getConnection();
+	    try {
+	        pst = con.prepareStatement(sql);
+	        pst.setInt(1, id);
+	        try (ResultSet rs = pst.executeQuery()) {
+	            if (rs.next()) {
+	            	pubKey = rs.getString("pubKey");
+	                if (pubKey == null) {
+	                	pubKey = ""; // Xử lý nếu giá trị là NULL
+	                }
+	            }
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	    return pubKey;
+	}
 
 	public int countID() {
 		int result = 0;
@@ -323,5 +384,11 @@ public class UserDao extends AbstractDAO {
 		}
 		return result;
 	}
-
+	public static void main(String[] args) {
+//		UserDao dao = new UserDao();
+//		System.out.println(dao.getPrivKey(21));
+//		System.out.println();
+//		System.out.println("cscscs");
+//		System.out.println(dao.getPubKey(21));
+	}
 }

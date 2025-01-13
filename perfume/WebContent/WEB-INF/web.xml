@@ -464,4 +464,13 @@
 		<url-pattern>/signup</url-pattern>
 	</servlet-mapping><!-- end đăng ký -->
 	<!-- auth -->
+	
+	<servlet>
+		<servlet-name>sign</servlet-name>
+		<servlet-class>controllers.publics.PublicOrderSign</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>sign</servlet-name>
+		<url-pattern>/sign</url-pattern>
+	</servlet-mapping><!-- end đăng ký -->
 </web-app>
