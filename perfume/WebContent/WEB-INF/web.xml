@@ -464,4 +464,5 @@
 		<url-pattern>/signup</url-pattern>
 	</servlet-mapping><!-- end đăng ký -->
 	<!-- auth -->
+	<!-- auth -->
 </web-app>

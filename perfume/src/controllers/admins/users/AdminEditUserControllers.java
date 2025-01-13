@@ -53,72 +53,91 @@ public class AdminEditUserControllers extends HttpServlet {
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		response.setContentType("text/html");
-		response.setCharacterEncoding("UTF-8");
-		request.setCharacterEncoding("UTF-8");
-		// categories user
-		CatUserDao catUserDao = new CatUserDao();
-		List<CatUser> catUserList = catUserDao.findAll();
-		request.setAttribute("catUserList", catUserList);
+	        throws ServletException, IOException {
+	    response.setContentType("text/html");
+	    response.setCharacterEncoding("UTF-8");
+	    request.setCharacterEncoding("UTF-8");
 
-		//user
-		UserDao userDao = new UserDao();
+	    // categories user
+	    CatUserDao catUserDao = new CatUserDao();
+	    List<CatUser> catUserList = catUserDao.findAll();
+	    request.setAttribute("catUserList", catUserList);
 
-		// get data
-		int idUser = 0;
-		try {
-			idUser = Integer.parseInt(request.getParameter("idUser"));
-		} catch (NumberFormatException e) {
-			RequestDispatcher rd = request.getRequestDispatcher("/views/error/index.jsp");
-			rd.forward(request, response);
-			return;
-		}
-		String fullname = request.getParameter("fullname");
-		String pass = request.getParameter("password");
-		int catUser = 0;
-		try {
-			catUser = Integer.parseInt(request.getParameter("catUser"));
-		} catch (NumberFormatException e) {
-			RequestDispatcher rd = request.getRequestDispatcher("/views/error/index.jsp");
-			rd.forward(request, response);
-			return;
-		}
-		// Lưu vào đối tượng
-		User user = new User(idUser, fullname, new CatUser(catUser));
-		request.setAttribute("user", user);
-		// check validate
-		if("".equals(fullname)) {
-			request.setAttribute("err", "Vui lòng nhập họ và tên");
-			RequestDispatcher rd = request.getRequestDispatcher("/views/admin/user/edit.jsp");
-			rd.forward(request, response);
-			return;
-		}else {
-			if("".equals(pass)) {
-				request.setAttribute("err", "Ơ...Chưa nhập mật khẩu");
-				RequestDispatcher rd = request.getRequestDispatcher("/views/admin/user/edit.jsp");
-				rd.forward(request, response);
-				return;
-			}else if(pass.length() < 5){
-				request.setAttribute("err", "Ngắn quá..Nhập thêm đi");
-				RequestDispatcher rd = request.getRequestDispatcher("/views/admin/user/edit.jsp");
-				rd.forward(request, response);
-				return;
-			}
-		}
-		String password = StringUtil.md5(pass);
-		
-		if (catUser < 1) {
-			request.setAttribute("err", "Vui lòng chọn loại tài khoản");
-			RequestDispatcher rd = request.getRequestDispatcher("/views/admin/user/edit.jsp");
-			rd.forward(request, response);
-			return;
-		}
-		// thêm vào database
-		int edit = userDao.edit(user);
-		if(edit > 0) {
-			response.sendRedirect(request.getContextPath()+"/admin/user?msg=OK");
-			return;
-		}
+	    // user
+	    UserDao userDao = new UserDao();
+
+	    // get data
+	    int idUser = 0;
+	    try {
+	        idUser = Integer.parseInt(request.getParameter("idUser"));
+	    } catch (NumberFormatException e) {
+	        request.setAttribute("err", "ID người dùng không hợp lệ!");
+	        RequestDispatcher rd = request.getRequestDispatcher("/views/error/index.jsp");
+	        rd.forward(request, response);
+	        return;
+	    }
+	    String fullname = request.getParameter("fullname");
+	    String pass = request.getParameter("password");
+	    int catUser = 0;
+	    try {
+	        catUser = Integer.parseInt(request.getParameter("catUser"));
+	    } catch (NumberFormatException e) {
+	        request.setAttribute("err", "Loại tài khoản không hợp lệ!");
+	        RequestDispatcher rd = request.getRequestDispatcher("/views/error/index.jsp");
+	        rd.forward(request, response);
+	        return;
+	    }
+
+	    // Lưu vào đối tượng
+	    User user = new User(idUser, fullname, new CatUser(catUser));
+	    request.setAttribute("user", user);
+
+	    // Validate dữ liệu
+	    if (fullname == null || fullname.isEmpty()) {
+	        request.setAttribute("err", "Vui lòng nhập họ và tên");
+	        RequestDispatcher rd = request.getRequestDispatcher("/views/admin/user/edit.jsp");
+	        rd.forward(request, response);
+	        return;
+	    }
+	    if (pass == null || pass.isEmpty()) {
+	        request.setAttribute("err", "Vui lòng nhập mật khẩu");
+	        RequestDispatcher rd = request.getRequestDispatcher("/views/admin/user/edit.jsp");
+	        rd.forward(request, response);
+	        return;
+	    }
+	    if (pass.length() < 5) {
+	        request.setAttribute("err", "Mật khẩu phải có ít nhất 5 ký tự");
+	        RequestDispatcher rd = request.getRequestDispatcher("/views/admin/user/edit.jsp");
+	        rd.forward(request, response);
+	        return;
+	    }
+	    String password = StringUtil.md5(pass);
+
+	    // Đổi mật khẩu
+//	    int result = userDao.changePass(user.getId(), password);
+//	    if (result <= 0) {
+//	        request.setAttribute("err", "Đổi mật khẩu thất bại. Vui lòng thử lại.");
+//	        RequestDispatcher rd = request.getRequestDispatcher("/views/admin/user/edit.jsp");
+//	        rd.forward(request, response);
+//	        return;
+//	    }
+
+	    if (catUser < 1) {
+	        request.setAttribute("err", "Vui lòng chọn loại tài khoản");
+	        RequestDispatcher rd = request.getRequestDispatcher("/views/admin/user/edit.jsp");
+	        rd.forward(request, response);
+	        return;
+	    }
+	    user.setPassword(password);
+	    // Cập nhật thông tin người dùng
+	    int edit = userDao.edit(user);
+	    if (edit > 0) {
+	        response.sendRedirect(request.getContextPath() + "/admin/user?msg=success");
+	    } else {
+	        request.setAttribute("err", "Cập nhật thông tin thất bại");
+	        RequestDispatcher rd = request.getRequestDispatcher("/views/admin/user/edit.jsp");
+	        rd.forward(request, response);
+	    }
 	}
+
 }

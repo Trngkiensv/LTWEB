@@ -323,5 +323,18 @@ public class UserDao extends AbstractDAO {
 		}
 		return result;
 	}
-
+	public int changePass(int idUser, String password) {
+	    int result = 0;
+	    con = DBConnectionUtil.getConnection();
+	    String sql = "UPDATE user SET password = ? WHERE id = ?";
+	    try {
+	        pst = con.prepareStatement(sql);
+	        pst.setString(1, password);
+	        pst.setInt(2, idUser); // Bạn 
+	        result = pst.executeUpdate();
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	    return result;
+	}
 }
