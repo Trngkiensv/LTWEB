@@ -25,7 +25,10 @@
 			<div class="container">
 				<ul class="tp-links">
 					<!-- Hiển thị tên người dùng và nút Đăng xuất -->
-					<li><span>Xin chào, <%=userInfor.getFullname()%></span>
+					<li><span>Xin chào, <%=userInfor.getFullname()%></span> <a
+						href="<%=request.getContextPath()%>/changePassword"
+						class="btn btn-link" style="padding: 0; color: blue;">Đổi mật
+							khẩu</a>
 						<form method="post" action="<%=request.getContextPath()%>/logout"
 							style="display: inline;">
 							<button type="submit" class="btn btn-link"
@@ -75,7 +78,7 @@
 												placeholder="Họ và tên" name="fullname" required>
 										</div>
 										<div class="form-group">
-											<input type="text" class="form-control" placeholder="Email"
+											<input type="email" class="form-control" placeholder="Email"
 												name="username" required>
 										</div>
 										<div class="form-group">
