@@ -16,5 +16,7 @@
 			<attribute name="javadoc_location" value="https://javaee.github.io/javaee-spec/javadocs/"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="D:/13/BMTT/FinalTest/final2/WebShop/perfume/WebContent/WEB-INF/lib/activation-1.1.1.jar"/>
+	<classpathentry kind="lib" path="D:/13/BMTT/javax.mail.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
